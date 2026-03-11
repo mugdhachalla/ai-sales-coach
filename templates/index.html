@@ -1,26 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Sales Coach</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>AI Sales Coach 🚀</h1>
+<p class="subtitle">Upload a product brochure and practice your sales pitch</p>
+
+<div class="card">
+
+<h2>Upload Brochure</h2>
+
 <form action="/upload" method="post" enctype="multipart/form-data">
-    <input type="file" name="brochure">
-    <button type="submit">Upload</button>
+<input type="file" name="brochure" required>
+<button type="submit">Generate Pitch</button>
 </form>
+
+</div>
+
+<div class="card">
+
 <h2>Practice Questions</h2>
 
 <form action="/evaluate" method="post">
 
-<p>Question 1</p>
+<label>Question 1</label>
 <textarea name="answer1"></textarea>
 
-<p>Question 2</p>
+<label>Question 2</label>
 <textarea name="answer2"></textarea>
 
-<p>Question 3</p>
+<label>Question 3</label>
 <textarea name="answer3"></textarea>
 
-<p>Question 4</p>
+<label>Question 4</label>
 <textarea name="answer4"></textarea>
 
-<p>Question 5</p>
+<label>Question 5</label>
 <textarea name="answer5"></textarea>
 
-<button type="submit">Evaluate My Pitch Readiness</button>
+<button type="submit">Evaluate Readiness</button>
 
 </form>
+
+</div>
+
+<div class="card">
+
+<h2>AI Output</h2>
+<p>Your generated pitch and feedback will appear here.</p>
+
+</div>
+
+</div>
+
+</body>
+</html>

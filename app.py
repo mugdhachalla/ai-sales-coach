@@ -12,8 +12,9 @@ load_dotenv()
 
 HF_API_KEY = os.getenv("HF_API_KEY")
 
+
 client = InferenceClient(
-    model="google/flan-t5-base",
+    model="meta-llama/Llama-3.1-8B-Instruct",
     token=HF_API_KEY
 )
 embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
@@ -104,7 +105,6 @@ def retrieve_context(query, index, chunks, k=3):
 def generate_pitch(query, index, chunks):
 
     context = retrieve_context(query, index, chunks)
-
     context = context[:2000]
 
     prompt = f"""
@@ -121,50 +121,50 @@ Brochure Information:
 """
 
     try:
-        response = client.text_generation(
-            prompt,
-            max_new_tokens=300
+
+        response = client.chat_completion(
+            messages=[
+                {"role": "system", "content": "You are a professional sales trainer."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=300
         )
 
-        return response
+        return response.choices[0].message.content
 
     except Exception as e:
-        return f"Error from HuggingFace: {str(e)}"
-
-
+        return f"HuggingFace error: {str(e)}"
+    
 # -------------------------------
 # Evaluate user answers
 # -------------------------------
-def generate_pitch(query, index, chunks):
-
-    context = retrieve_context(query, index, chunks)
-
-    context = context[:2000]
+def evaluate_answers(answers):
 
     prompt = f"""
-You are a professional sales trainer.
+You are a sales trainer evaluating a trainee.
 
-Using the brochure information below create:
+Answers:
+{answers}
 
-1. A 60 second sales pitch
-2. Key selling points
-3. Five practice questions for a salesman
+Evaluate and provide:
 
-Brochure Information:
-{context}
+preparedness score out of 10
+strengths
+improvements
 """
 
     try:
+
         response = client.text_generation(
             prompt,
-            max_new_tokens=300
+            model="HuggingFaceH4/zephyr-7b-beta",
+            max_new_tokens=200
         )
 
         return response
 
     except Exception as e:
-        return f"Error from HuggingFace: {str(e)}"
-
+        return str(e)
 
 # -------------------------------
 # Routes
