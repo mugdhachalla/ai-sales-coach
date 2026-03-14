@@ -69,7 +69,7 @@ cd ai-sales-coach
 ```bash
 python -m venv venv
 ```
-Activate the environment
+Activate the environment\
 Mac/Linux:
 ```bash
 source venv/bin/activate
@@ -83,7 +83,7 @@ venv\Scripts\activate
 pip install -r requirements.txt
 ```
 ### 4. Create environment variables
-Create a .env file and add:
+Create a .env file in the project root and add:
 ```bash
 SECRET_KEY=your_secret_key_here
 HF_API_KEY=your_huggingface_api_key_here
@@ -118,5 +118,4 @@ This project was built as a learning exercise to explore:
 
 - Retrieval Augmented Generation (RAG)
 - Document understanding pipelines
-- AI assisted productivity tools
 - Building AI powered web applications
