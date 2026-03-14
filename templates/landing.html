@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AI Sales Coach</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+<div class="logo">AI Sales Coach</div>
+
+<div class="nav-links">
+<a href="{{ url_for('upload_page') }}" class="nav-button">Start Practicing</a>
+</div>
+</nav>
+
+<header class="hero">
+
+<h1>Turn Product Brochures Into Confident Sales Pitches</h1>
+
+<p>
+Upload a brochure, generate a natural sales pitch, practice answering questions,
+and get AI feedback on your sales readiness.
+</p>
+
+<a href="{{ url_for('upload_page') }}" class="primary-button">
+Generate Your First Pitch
+</a>
+
+</header>
+
+<section class="features">
+
+<h2>How It Works</h2>
+
+<div class="feature-grid">
+
+<div class="feature-card">
+<h3>Upload Brochure</h3>
+<p>Upload any product brochure and our AI extracts the key information instantly.</p>
+</div>
+
+<div class="feature-card">
+<h3>Generate Pitch</h3>
+<p>AI turns brochure details into a natural human sales pitch.</p>
+</div>
+
+<div class="feature-card">
+<h3>Practice & Improve</h3>
+<p>Answer practice questions and receive feedback on your sales readiness.</p>
+</div>
+
+</div>
+
+</section>
+
+<footer>
+
+<p>AI Sales Coach • Built to help you practice selling smarter</p>
+
+</footer>
+
+</body>
+</html>

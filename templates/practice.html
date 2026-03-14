@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Practice Sales Pitch</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Practice Your Pitch</h1>
+
+<div class="card">
+
+<form action="{{ url_for('evaluate') }}" method="post">
+
+<label>How would you explain the product in 30 seconds?</label>
+<textarea name="answer1"></textarea>
+
+<label>Who is the ideal customer for this product?</label>
+<textarea name="answer2"></textarea>
+
+<label>What are the main benefits of the product?</label>
+<textarea name="answer3"></textarea>
+
+<label>How would you respond if a customer says the product is expensive?</label>
+<textarea name="answer4"></textarea>
+
+<label>Why should a customer choose this product over competitors?</label>
+<textarea name="answer5"></textarea>
+
+<button type="submit">Evaluate My Answers</button>
+
+</form>
+
+</div>
+
+<a class="button" href="{{ url_for('pitch') }}">Back to Pitch</a>
+
+</div>
+
+</body>
+</html>

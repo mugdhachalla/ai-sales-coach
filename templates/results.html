@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Your AI Sales Pitch</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+	<div class="hero-card">
+		<p class="eyebrow">Generated Successfully</p>
+		<h1>Your AI Sales Pitch ✨</h1>
+		<p class="subtitle">Use this draft to rehearse, refine delivery, and close with confidence.</p>
+	</div>
+
+	<div class="card">
+		<h2>We have an excellend pitch prepared for you!</h2>
+		<pre class="output-text">{{ pitch }}</pre>
+	</div>
+
+	<div class="cta-links">
+
+<a class="button" href="{{ url_for('practice') }}">Start Practice Questions</a>
+
+<a class="button" href="{{ url_for('upload_page') }}">Upload Another Brochure</a>
+
+</div>
+</div>
+
+</body>
+</html>

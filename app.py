@@ -1,5 +1,5 @@
 from huggingface_hub import InferenceClient
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 import pdfplumber
 import os
 import requests
@@ -20,7 +20,7 @@ client = InferenceClient(
 embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 
 app = Flask(__name__)
-
+app.secret_key = os.getenv("SECRET_KEY")
 
 # -------------------------------
 # Extract text from PDF
@@ -108,21 +108,30 @@ def generate_pitch(query, index, chunks):
     context = context[:2000]
 
     prompt = f"""
-You are a professional sales trainer.
+You are an experienced retail salesperson speaking directly to a customer in a store.
 
-Using the brochure information below create:
+Your goal is to explain the product in a natural, friendly, and persuasive way, as if you are helping a customer decide whether to buy it.
 
-1. A 60 second sales pitch
-2. Key selling points
-3. Five practice questions for a salesman
+Use the product information below to create a short sales pitch that sounds conversational and human.
 
-Brochure Information:
+Guidelines:
+- Speak as if you are talking directly to a customer.
+- Keep the tone friendly, clear, and helpful.
+- Focus on how the product benefits the customer.
+- Avoid special characters like asterisks.
+- Do not include headings or formatting.
+- Keep the pitch around 7 to 10 sentences.
+
+Product information:
 {context}
+
+Write the sales pitch now.
 """
 
     try:
 
-        response = client.chat_completion(
+        completion = client.chat.completions.create(
+            model="HuggingFaceH4/zephyr-7b-beta",
             messages=[
                 {"role": "system", "content": "You are a professional sales trainer."},
                 {"role": "user", "content": prompt}
@@ -130,10 +139,12 @@ Brochure Information:
             max_tokens=300
         )
 
-        return response.choices[0].message.content
+        return completion.choices[0].message.content
 
     except Exception as e:
-        return f"HuggingFace error: {str(e)}"
+        import traceback
+        traceback.print_exc()
+        return str(e)
     
 # -------------------------------
 # Evaluate user answers
@@ -141,29 +152,55 @@ Brochure Information:
 def evaluate_answers(answers):
 
     prompt = f"""
-You are a sales trainer evaluating a trainee.
+You are a strict sales trainer grading a trainee.
+
+Product: Fitbit fitness tracker.
+
+Evaluate the trainee's answers below.
 
 Answers:
 {answers}
 
-Evaluate and provide:
+Score the trainee from 0 to 10 using this rubric:
 
-preparedness score out of 10
-strengths
-improvements
+0-2 → Completely incorrect or irrelevant answers
+3-4 → Very weak understanding of the product
+5-6 → Basic understanding but lacks clarity or sales value
+7-8 → Good understanding with reasonable explanation
+9-10 → Excellent sales pitch with clear value and persuasion
+
+Be strict when grading.
+
+Return the result in this format:
+
+Score: X/10
+
+Strengths:
+- ...
+
+Weaknesses:
+- ...
+
+How to Improve:
+- ...
 """
 
     try:
 
-        response = client.text_generation(
-            prompt,
+        completion = client.chat.completions.create(
             model="HuggingFaceH4/zephyr-7b-beta",
-            max_new_tokens=200
+            messages=[
+                {"role": "system", "content": "You are an expert sales trainer."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=200
         )
 
-        return response
+        return completion.choices[0].message.content
 
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         return str(e)
 
 # -------------------------------
@@ -171,6 +208,10 @@ improvements
 # -------------------------------
 @app.route("/")
 def home():
+    return render_template("landing.html")
+
+@app.route("/upload_page")
+def upload_page():
     return render_template("index.html")
 
 
@@ -192,20 +233,43 @@ def upload():
         index,
         chunks
     )
+    session ["pitch"]=pitch
 
-    return str(pitch)
+    return render_template("results.html", pitch=pitch)
+
+
+
+@app.route("/practice-questions")
+def practice_questions():
+    return render_template("practice.html")
+
+
+@app.route("/practice")
+def practice():
+    return redirect(url_for("practice_questions"))
+
 @app.route("/evaluate", methods=["POST"])
 def evaluate():
 
     answers = ""
 
-    for i in range(1, 6):
+    for i in range(1,6):
         answers += request.form.get(f"answer{i}") + "\n"
 
     feedback = evaluate_answers(answers)
 
-    return str(feedback)
+    return render_template("evaluation.html", feedback=feedback)
 
+
+@app.route("/pitch")
+def pitch():
+
+    pitch = session.get("pitch")
+
+    if not pitch:
+        return "No pitch available. Please upload a brochure first."
+
+    return render_template("results.html", pitch=pitch)
 
 # -------------------------------
 # Run server
