@@ -57,6 +57,47 @@ Users can revisit the generated pitch during practice without uploading the broc
 
 ---
 
+## Running the Project Locally
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/mugdhachalla/ai-sales-coach.git
+cd ai-sales-coach
+```
+### 2. Create virtual environment
+```bash
+python -m venv venv
+```
+Activate the environment
+Mac/Linux:
+```bash
+source venv/bin/activate
+```
+Windows:
+```bash
+venv\Scripts\activate
+```
+### 3. Install dependencies
+```bash
+pip install -r requirements.txt
+```
+### 4. Create environment variables
+Create a .env file and add:
+```bash
+SECRET_KEY=your_secret_key_here
+HF_API_KEY=your_huggingface_api_key_here
+```
+### 5. Run the application
+```bash
+python app.py
+```
+### 6. Open the application
+Visit: 
+```bash
+http://127.0.0.1:5000
+```
+
 ## Status
 
 This project is currently a **work in progress**.

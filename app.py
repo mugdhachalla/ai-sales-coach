@@ -22,9 +22,7 @@ embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
 
-# -------------------------------
-# Extract text from PDF
-# -------------------------------
+
 def extract_text(pdf_file):
     text = ""
     with pdfplumber.open(pdf_file) as pdf:
@@ -35,9 +33,7 @@ def extract_text(pdf_file):
     return text
 
 
-# -------------------------------
-# Split brochure into chunks
-# -------------------------------
+
 def chunk_text(text, chunk_size=500):
 
     sentences = text.split(".")
@@ -58,19 +54,12 @@ def chunk_text(text, chunk_size=500):
     return chunks
 
 
-# -------------------------------
-# Create embeddings
-# -------------------------------
 def create_embeddings(chunks):
 
     embeddings = embedding_model.encode(chunks)
 
     return np.array(embeddings).astype("float32")
 
-
-# -------------------------------
-# Build FAISS vector index
-# -------------------------------
 def build_index(embeddings):
 
     dimension = embeddings.shape[1]
@@ -82,9 +71,6 @@ def build_index(embeddings):
     return index
 
 
-# -------------------------------
-# Retrieve relevant context
-# -------------------------------
 def retrieve_context(query, index, chunks, k=3):
 
     query_embedding = embedding_model.encode([query]).astype("float32")
@@ -99,9 +85,6 @@ def retrieve_context(query, index, chunks, k=3):
     return " ".join(results)
 
 
-# -------------------------------
-# Generate pitch using HuggingFace
-# -------------------------------
 def generate_pitch(query, index, chunks):
 
     context = retrieve_context(query, index, chunks)
@@ -145,10 +128,7 @@ Write the sales pitch now.
         import traceback
         traceback.print_exc()
         return str(e)
-    
-# -------------------------------
-# Evaluate user answers
-# -------------------------------
+
 def evaluate_answers(answers):
 
     prompt = f"""
@@ -203,9 +183,8 @@ How to Improve:
         traceback.print_exc()
         return str(e)
 
-# -------------------------------
 # Routes
-# -------------------------------
+
 @app.route("/")
 def home():
     return render_template("landing.html")
@@ -271,8 +250,6 @@ def pitch():
 
     return render_template("results.html", pitch=pitch)
 
-# -------------------------------
-# Run server
-# -------------------------------
+
 if __name__ == "__main__":
     app.run(debug=True)
