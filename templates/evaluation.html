@@ -7,6 +7,14 @@
 
 <body>
 
+<nav class="navbar">
+<a class="logo" href="{{ url_for('home') }}">SalesCoach AI</a>
+
+<div class="nav-links">
+<a href="{{ url_for('upload_page') }}" class="nav-button">Start Training</a>
+</div>
+</nav>
+
 <div class="container">
 
 <h1>Your Sales Readiness Score</h1>
@@ -19,7 +27,7 @@
 
 <a class="button" href="{{ url_for('practice_questions') }}">Practice Again</a>
 
-<a class="button" href="/upload_page">Upload New Brochure</a>
+<a class="button" href="{{ url_for('upload_page') }}">Upload New Brochure</a>
 <a class="button" href="{{ url_for('pitch') }}">View Pitch Again</a>
 
 </div>

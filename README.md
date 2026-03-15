@@ -1,8 +1,8 @@
-# AI Sales Coach
+# SalesCoach AI
 
-AI Sales Coach is a web application designed to help salespeople quickly understand new products and practice delivering effective sales pitches using AI.
+SalesCoach AI is a web application designed to help salespeople quickly understand new products and practice delivering effective sales pitches using AI.
 
-The platform analyzes product brochures, generates a natural conversational sales pitch, and allows users to practice answering sales questions while receiving AI based feedback on their readiness.
+The platform analyzes product brochures, generates sales training material, and allows users to practice answering sales questions while receiving AI based feedback on their readiness.
 
 The goal of the project is to simulate a real world sales preparation workflow and help users build confidence before interacting with customers.
 

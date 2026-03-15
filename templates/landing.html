@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>AI Sales Coach</title>
+<title>SalesCoach AI</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 
 <body>
 
 <nav class="navbar">
-<div class="logo">AI Sales Coach</div>
+<a class="logo" href="{{ url_for('home') }}">SalesCoach AI</a>
 
 <div class="nav-links">
-<a href="{{ url_for('upload_page') }}" class="nav-button">Start Practicing</a>
+<a href="{{ url_for('upload_page') }}" class="nav-button">Start Training</a>
 </div>
 </nav>
 
@@ -20,12 +20,14 @@
 <h1>Turn Product Brochures Into Confident Sales Pitches</h1>
 
 <p>
-Upload a brochure, generate a natural sales pitch, practice answering questions,
-and get AI feedback on your sales readiness.
+Upload a brochure, generate a detailed training material, practice answering questions,
+and get AI feedback on your sales readiness.<br>
+<br>
+<b>Train Smarter. Sell Better.</b>
 </p>
 
 <a href="{{ url_for('upload_page') }}" class="primary-button">
-Generate Your First Pitch
+Start your Sales Training
 </a>
 
 </header>
@@ -57,7 +59,7 @@ Generate Your First Pitch
 
 <footer>
 
-<p>AI Sales Coach • Built to help you practice selling smarter</p>
+<p>SalesCoach AI • Built to help you practice selling smarter</p>
 
 </footer>
 

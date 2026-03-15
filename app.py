@@ -91,25 +91,47 @@ def generate_pitch(query, index, chunks):
     context = context[:2000]
 
     prompt = f"""
-You are an experienced retail salesperson speaking directly to a customer in a store.
+        You are an experienced sales trainer preparing training material for a new salesperson.
 
-Your goal is to explain the product in a natural, friendly, and persuasive way, as if you are helping a customer decide whether to buy it.
+        The salesperson needs to study the product and learn how to confidently explain and sell it to customers.
 
-Use the product information below to create a short sales pitch that sounds conversational and human.
+        Using the product information below, create clear and structured training material.
 
-Guidelines:
-- Speak as if you are talking directly to a customer.
-- Keep the tone friendly, clear, and helpful.
-- Focus on how the product benefits the customer.
-- Avoid special characters like asterisks.
-- Do not include headings or formatting.
-- Keep the pitch around 7 to 10 sentences.
+        The material should be easy to read and written like a trainer teaching a trainee how to sell the product.
 
-Product information:
-{context}
+        Write the training material using the following structure:
 
-Write the sales pitch now.
-"""
+        PRODUCT OVERVIEW
+        Explain what the product is and what it is designed to do.
+
+        TARGET CUSTOMER
+        Describe who the ideal customer for this product is.
+
+        KEY CUSTOMER BENEFITS
+        Explain the most important ways this product helps customers or solves problems.
+
+        IMPORTANT FEATURES
+        Explain the most important product features and why they matter to customers.
+
+        HOW TO EXPLAIN THIS PRODUCT TO A CUSTOMER
+        Describe how a salesperson should talk about this product during a conversation with a customer.
+
+        COMMON CUSTOMER QUESTIONS
+        List a few realistic questions a customer might ask about this product.
+
+        SALES TIPS
+        Give practical advice to the salesperson on how to present the product confidently.
+
+        Guidelines:
+        Write in clear paragraphs.
+        Do not use asterisks or bullet symbols.
+        Do not use markdown formatting.
+        Keep the tone professional, helpful, and instructional.
+        Write as if a trainer is teaching a new salesperson how to sell the product.
+
+        Product information from the brochure:
+        {context}
+        """
 
     try:
 
@@ -119,7 +141,7 @@ Write the sales pitch now.
                 {"role": "system", "content": "You are a professional sales trainer."},
                 {"role": "user", "content": prompt}
             ],
-            max_tokens=300
+            max_tokens=900
         )
 
         return completion.choices[0].message.content
@@ -129,40 +151,67 @@ Write the sales pitch now.
         traceback.print_exc()
         return str(e)
 
-def evaluate_answers(answers):
+def evaluate_answers(answers, context):
 
     prompt = f"""
-You are a strict sales trainer grading a trainee.
+You are a strict sales trainer evaluating a trainee.
 
-Product: Fitbit fitness tracker.
+The trainee studied a product brochure and answered questions about the product.
 
-Evaluate the trainee's answers below.
+Product information from the brochure:
+{context}
 
-Answers:
+Trainee answers:
 {answers}
 
-Score the trainee from 0 to 10 using this rubric:
+You must grade the trainee strictly.
 
-0-2 → Completely incorrect or irrelevant answers
-3-4 → Very weak understanding of the product
-5-6 → Basic understanding but lacks clarity or sales value
-7-8 → Good understanding with reasonable explanation
-9-10 → Excellent sales pitch with clear value and persuasion
+Scoring Guidelines:
 
-Be strict when grading.
+0–2 (Very Poor)
+Answers are meaningless, extremely short, unrelated, or show no understanding of the product.
+Examples: ".", "ok", "yes", "good", random words, or generic statements.
 
-Return the result in this format:
+2–4 (Poor)
+Answers show minimal effort but contain vague or generic statements that could apply to any product.
+Little to no product knowledge is demonstrated.
 
-Score: X/10
+4–6 (Average)
+Answers show basic understanding but lack detail, clear explanation of benefits, or connection to the product brochure.
 
-Strengths:
-- ...
+6–8 (Good)
+Answers clearly demonstrate understanding of the product and explain features or benefits in a reasonably clear way.
 
-Weaknesses:
-- ...
+8–10 (Excellent)
+Answers show strong product knowledge, clearly explain value to customers, and demonstrate good sales thinking.
 
-How to Improve:
-- ...
+Important rules:
+
+If answers are extremely short, meaningless, or contain only punctuation like "." or "...", the score MUST be between 0 and 2.
+
+If answers are generic and do not reference the product, the score MUST NOT exceed 4.
+
+Only give scores above 6 if the trainee clearly demonstrates understanding of the product and its benefits.
+
+Output format:
+
+Sales Readiness Score: X/10
+
+Reasoning
+Explain briefly why this score was given.
+
+Strengths
+Explain what the trainee did well.
+
+Weaknesses
+Explain what knowledge or skills are missing.
+
+How to Improve
+Give specific advice on how the trainee could improve their answers.
+
+Write clear training feedback for a salesperson.
+
+Do not use asterisks or bullet symbols.
 """
 
     try:
@@ -173,7 +222,7 @@ How to Improve:
                 {"role": "system", "content": "You are an expert sales trainer."},
                 {"role": "user", "content": prompt}
             ],
-            max_tokens=200
+            max_tokens=600
         )
 
         return completion.choices[0].message.content
@@ -206,6 +255,11 @@ def upload():
     embeddings = create_embeddings(chunks)
 
     index = build_index(embeddings)
+    context = retrieve_context(
+        "product features benefits pricing use cases target customer",
+        index,
+        chunks
+    )
 
     pitch = generate_pitch(
         "product features benefits pricing use cases target customer",
@@ -213,6 +267,7 @@ def upload():
         chunks
     )
     session ["pitch"]=pitch
+    session["context"]=context
 
     return render_template("results.html", pitch=pitch)
 
@@ -234,8 +289,9 @@ def evaluate():
 
     for i in range(1,6):
         answers += request.form.get(f"answer{i}") + "\n"
+    context=session.get("context")
 
-    feedback = evaluate_answers(answers)
+    feedback = evaluate_answers(answers, context)
 
     return render_template("evaluation.html", feedback=feedback)
 

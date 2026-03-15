@@ -1,11 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Practice Sales Pitch</title>
+<title>Practice</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 
 <body>
+
+<nav class="navbar">
+<a class="logo" href="{{ url_for('home') }}">SalesCoach AI</a>
+
+<div class="nav-links">
+<a href="{{ url_for('upload_page') }}" class="nav-button">Start Training</a>
+</div>
+</nav>
 
 <div class="container">
 
@@ -16,19 +24,19 @@
 <form action="{{ url_for('evaluate') }}" method="post">
 
 <label>How would you explain the product in 30 seconds?</label>
-<textarea name="answer1"></textarea>
+<textarea name="answer1" required></textarea>
 
 <label>Who is the ideal customer for this product?</label>
-<textarea name="answer2"></textarea>
+<textarea name="answer2" required></textarea>
 
 <label>What are the main benefits of the product?</label>
-<textarea name="answer3"></textarea>
+<textarea name="answer3" required></textarea>
 
 <label>How would you respond if a customer says the product is expensive?</label>
-<textarea name="answer4"></textarea>
+<textarea name="answer4" required></textarea>
 
 <label>Why should a customer choose this product over competitors?</label>
-<textarea name="answer5"></textarea>
+<textarea name="answer5" required></textarea>
 
 <button type="submit">Evaluate My Answers</button>
 
