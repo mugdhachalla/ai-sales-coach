@@ -12,11 +12,11 @@ The goal of the project is to simulate a real world sales preparation workflow a
 
 - Upload product brochures in PDF format
 - Automatically extract and analyze brochure content
-- Generate a natural, conversational sales pitch based on product information
+- Generate sales training material based on product information
 - Practice answering realistic sales questions
 - Receive AI evaluation and feedback on sales readiness
 - Review the generated pitch without reuploading the brochure
-- Multi page interface including landing page, pitch page, practice page, and evaluation page
+- Multi page interface including landing page, results, practice page, and evaluation page
 
 ---
 
@@ -39,7 +39,7 @@ The goal of the project is to simulate a real world sales preparation workflow a
 3. The text is divided into smaller chunks.
 4. Sentence embeddings are created using Sentence Transformers.
 5. FAISS retrieves the most relevant information from the brochure.
-6. A Large Language Model generates a natural sales pitch.
+6. A Large Language Model generates training material.
 7. The user practices answering sales questions.
 8. The system evaluates the responses and provides feedback on sales readiness.
 
