@@ -22,14 +22,31 @@
 
 <div class="card">
 
-<h2>Upload Brochure</h2>
+<form id="uploadForm" action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
 
-<form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+<label>Upload Brochure:</label>
 <input type="file" name="brochure" required>
-<button type="submit">Generate Training Material</button>
+
+<label>Industry:</label>
+<input type="text" name="industry" placeholder="e.g. Real Estate, Healthcare" required>
+
+<button type="submit" id="submitBtn">Generate Training Material</button>
+
+<div id="spinner" class="spinner hidden"></div>
+<p id="loadingText" class="loading-text hidden">Processing your brochure...</p>
+
 </form>
 
+
 </div>
+
+<script>
+document.getElementById('uploadForm').addEventListener('submit', function() {
+  document.getElementById('submitBtn').classList.add('hidden');
+  document.getElementById('spinner').classList.remove('hidden');
+  document.getElementById('loadingText').classList.remove('hidden');
+});
+</script>
 
 </div>
 

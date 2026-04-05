@@ -43,6 +43,20 @@ The goal of the project is to simulate a real world sales preparation workflow a
 7. The user practices answering sales questions.
 8. The system evaluates the responses and provides feedback on sales readiness.
 
+## Deployment Modes
+
+The app supports two runtime modes using the `APP_MODE` environment variable.
+
+- `APP_MODE=production` (default): lightweight mode
+	- Uses lightweight keyword based retrieval
+	- Does not require Sentence Transformers / FAISS at runtime
+
+- `APP_MODE=local` (or `dev` / `development`): full RAG mode
+	- Uses Sentence Transformers embeddings
+	- Uses FAISS for nearest neighbor retrieval
+
+If full RAG dependencies are unavailable in local/dev mode, the app automatically falls back to lightweight retrieval.
+
 ---
 
 ## Application Flow
@@ -87,6 +101,12 @@ Create a .env file in the project root and add:
 ```bash
 SECRET_KEY=your_secret_key_here
 HF_API_KEY=your_huggingface_api_key_here
+APP_MODE=local
+```
+
+For production deployment, set:
+```bash
+APP_MODE=production
 ```
 ### 5. Run the application
 ```bash

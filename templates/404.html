@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page Not Found</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+<a class="logo" href="{{ url_for('home') }}">SalesCoach AI</a>
+
+<div class="nav-links">
+<a href="{{ url_for('upload_page') }}" class="nav-button">Start Training</a>
+</div>
+</nav>
+
+<div class="container">
+
+	<div class="hero-card">
+		<p class="eyebrow">Error 404</p>
+		<h1>Page Not Found</h1>
+		<p class="subtitle">The page you're looking for doesn't exist.</p>
+	</div>
+
+	<div class="card">
+		<p>It looks like you've stumbled upon a page that doesn't exist. Don't worry, head back to the home page or start your training journey.</p>
+	</div>
+
+	<div class="cta-links">
+		<a class="button" href="{{ url_for('home') }}">Go to Home</a>
+		<a class="button" href="{{ url_for('upload_page') }}">Start Training</a>
+	</div>
+
+</div>
+
+</body>
+</html>
