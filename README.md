@@ -57,6 +57,16 @@ The app supports two runtime modes using the `APP_MODE` environment variable.
 
 If full RAG dependencies are unavailable in local/dev mode, the app automatically falls back to lightweight retrieval.
 
+## Architecture Notes
+
+This project uses an environment-aware architecture to balance performance and deployment reliability.
+
+In the local environment, PDF parsing is handled using `pdfplumber` for higher accuracy and better text extraction.
+
+In the deployed environment, `pypdf` is used as a lightweight alternative to ensure compatibility and stability on cloud platforms.
+
+This approach ensures that the system remains fully functional in production while retaining higher fidelity processing during development and testing.
+
 ---
 
 ## Application Flow
@@ -133,7 +143,9 @@ Planned improvements include:
 - Improved evaluation scoring
 - More advanced AI feedback
 - Enhanced UI and UX
-- Improved pitch generation
+- Improved pmaterial generation
+- Improved accuracy
+- Containerized deployment to support full PDF processing capabilities
 
 ---
 
