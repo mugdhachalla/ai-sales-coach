@@ -5,7 +5,10 @@ import os
 import requests
 import re
 from dotenv import load_dotenv
-
+print("=== STARTING APP ===")
+print("MODE:", MODE)
+print("USE_FULL_RAG:", USE_FULL_RAG)
+print("HF KEY PRESENT:", bool(HF_API_KEY))
 load_dotenv()
 
 MODE = (os.getenv("APP_MODE", "production") or "production").lower()
