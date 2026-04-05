@@ -1,0 +1,7 @@
+-r requirements.txt
+
+# Local full RAG mode only (APP_MODE=local/dev/development)
+sentence-transformers
+faiss-cpu
+numpy
+torch

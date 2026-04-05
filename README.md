@@ -96,6 +96,11 @@ venv\Scripts\activate
 ```bash
 pip install -r requirements.txt
 ```
+
+For local full RAG mode (`APP_MODE=local`), install extra dependencies:
+```bash
+pip install -r requirements-local.txt
+```
 ### 4. Create environment variables
 Create a .env file in the project root and add:
 ```bash
