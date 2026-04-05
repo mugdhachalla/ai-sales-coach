@@ -2,6 +2,7 @@ from huggingface_hub import InferenceClient
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 import os
 import re
+import importlib
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -12,10 +13,6 @@ if os.getenv("RENDER") == "true":
 
 HF_API_KEY = os.getenv("HF_API_KEY")
 
-print("=== STARTING APP ===")
-print("MODE:", MODE)
-print("USE_FULL_RAG:", USE_FULL_RAG)
-print("HF KEY PRESENT:", bool(HF_API_KEY))
 
 
 embedding_model = None
@@ -46,16 +43,31 @@ print(f"[INFO] APP_MODE={MODE} | FULL_RAG={'enabled' if USE_FULL_RAG else 'disab
 
 
 def extract_text(pdf_file):
-    raw = pdf_file.read()
-    pdf_file.seek(0)
-
-    if not raw:
-        return ""
-
     try:
-        return raw.decode("utf-8")
-    except UnicodeDecodeError:
-        return raw.decode("latin-1", errors="ignore")
+        text = ""
+
+        if USE_FULL_RAG:
+            pdfplumber = importlib.import_module("pdfplumber")
+
+            with pdfplumber.open(pdf_file) as pdf:
+                for page in pdf.pages:
+                    page_text = page.extract_text()
+                    if page_text:
+                        text += page_text
+        else:
+            pypdf = importlib.import_module("pypdf")
+            PdfReader = pypdf.PdfReader
+            reader = PdfReader(pdf_file)
+            for page in reader.pages:
+                page_text = page.extract_text()
+                if page_text:
+                    text += page_text
+
+        return text
+
+    except Exception as e:
+        print("PDF extraction failed:", e)
+        return ""
 
 
 
