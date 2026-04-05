@@ -1,14 +1,9 @@
 from huggingface_hub import InferenceClient
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session
-import pdfplumber
 import os
 import requests
 import re
 from dotenv import load_dotenv
-print("=== STARTING APP ===")
-print("MODE:", MODE)
-print("USE_FULL_RAG:", USE_FULL_RAG)
-print("HF KEY PRESENT:", bool(HF_API_KEY))
 load_dotenv()
 
 MODE = (os.getenv("APP_MODE", "production") or "production").lower()
@@ -17,6 +12,11 @@ if os.getenv("RENDER") == "true":
     USE_FULL_RAG = False
 
 HF_API_KEY = os.getenv("HF_API_KEY")
+
+print("=== STARTING APP ===")
+print("MODE:", MODE)
+print("USE_FULL_RAG:", USE_FULL_RAG)
+print("HF KEY PRESENT:", bool(HF_API_KEY))
 
 
 embedding_model = None
@@ -47,13 +47,16 @@ print(f"[INFO] APP_MODE={MODE} | FULL_RAG={'enabled' if USE_FULL_RAG else 'disab
 
 
 def extract_text(pdf_file):
-    text = ""
-    with pdfplumber.open(pdf_file) as pdf:
-        for page in pdf.pages:
-            page_text = page.extract_text()
-            if page_text:
-                text += page_text
-    return text
+    raw = pdf_file.read()
+    pdf_file.seek(0)
+
+    if not raw:
+        return ""
+
+    try:
+        return raw.decode("utf-8")
+    except UnicodeDecodeError:
+        return raw.decode("latin-1", errors="ignore")
 
 
 

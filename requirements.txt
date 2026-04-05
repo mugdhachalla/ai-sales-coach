@@ -1,6 +1,5 @@
 # Production runtime
 Flask
 huggingface_hub
-pdfplumber
 python-dotenv
 gunicorn
