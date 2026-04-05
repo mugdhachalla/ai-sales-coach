@@ -1,7 +1,6 @@
 from huggingface_hub import InferenceClient
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 import os
-import requests
 import re
 from dotenv import load_dotenv
 load_dotenv()
