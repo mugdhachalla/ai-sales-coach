@@ -6,6 +6,8 @@ The platform analyzes product brochures, generates sales training material, and 
 
 The goal of the project is to simulate a real world sales preparation workflow and help users build confidence before interacting with customers.
 
+Check out the live demo: https://salescoach-ai.onrender.com/
+
 ---
 
 ## Features
